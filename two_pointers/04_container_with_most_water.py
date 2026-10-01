@@ -1,71 +1,62 @@
-"""
-================================================================================
-Problem: Container With Most Water / Warehouse Container Capacity
-Pattern: Two Pointers (Greedy Inward Shrinking)
-LeetCode: LC 11 - Container With Most Water
-================================================================================
+# 🏢 Problem 4 — Warehouse Container Capacity
+# You're working on a warehouse system. Several vertical barriers are placed along a storage area, and their heights are represented by:
+# heights = [3, 1, 2, 5, 4, 8, 2]
+# Choose two barriers that can hold the maximum amount of material between them.
+# The capacity between two barriers is:
+# capacity = shorter barrier × distance between barriers
+# Example
+# If you choose:
+# height 3 at index 0
+# height 8 at index 5
+# then:
+# shorter height = 3
+# distance = 5 - 0 = 5
+#
+# capacity = 3 × 5 = 15
+# Your task
 
-Scenario: Warehouse Container Capacity
-Several vertical barriers are placed along a storage area, and their heights are:
-    heights = [3, 1, 2, 5, 4, 8, 2]
+heights = [3, 1, 2, 5, 4, 8, 2]
+l_height = 0
+r_height = len(heights) - 1
+max_capacity = 0
 
-Choose two barriers that can hold the maximum amount of material between them.
-The capacity between two barriers is:
-    capacity = shorter barrier height × distance between barriers (width)
+while l_height < r_height:
+    min_height_wall = min(heights[l_height], heights[r_height])
+    distance = r_height - l_height
+    capacity = min_height_wall * distance
+    max_capacity = max(max_capacity, capacity)
+    # pointers moving now
+    if heights[l_height] < heights[r_height]:
+        # Move left pointer
+        l_height += 1
+    elif heights[r_height] < heights[l_height]:
+        # Move Right pointer
+        r_height -= 1
+    elif heights[r_height] == heights[l_height]:
+        l_height += 1
 
-Example:
-    height 3 at index 0 and height 8 at index 5:
-    shorter height = min(3, 8) = 3
-    distance = 5 - 0 = 5
-    capacity = 3 × 5 = 15
+print(f"The Maximum water contains: {max_capacity}")
 
-    Best pair:
-    height 5 at index 3 and height 8 at index 5:
-    shorter height = min(5, 8) = 5
-    distance = 5 - 3 = 2 -> capacity = 10
-    Checking all pairs gives maximum capacity = 15.
+# Write a Two Pointers solution.
+# Rules
+# Start with left at the beginning.
+# Start with right at the end.
+# Don't use nested loops.
+# Don't sort the array.
+# Find the maximum capacity.
 
-Approach (Opposite Direction Two Pointers):
-1. Place left pointer at start (0) and right pointer at end (len(heights) - 1).
-2. Compute distance = right - left.
-3. Compute capacity = min(heights[left], heights[right]) * distance.
-4. Update max_capacity = max(max_capacity, capacity).
-5. Move the pointer pointing to the shorter wall:
-   - If heights[left] < heights[right]: move left += 1 (hoping to find a taller barrier).
-   - If heights[right] < heights[left]: move right -= 1.
-   - If heights[left] == heights[right]: move either (e.g., left += 1).
-6. Repeat while left < right.
-
-Complexity:
-- Time Complexity: O(n) - Single pass over the array.
-- Space Complexity: O(1) - Constant auxiliary space.
-================================================================================
-"""
-
-def max_container_capacity(heights: list[int]) -> int:
-    l_height = 0
-    r_height = len(heights) - 1
-    max_capacity = 0
-
-    while l_height < r_height:
-        min_height_wall = min(heights[l_height], heights[r_height])
-        distance = r_height - l_height
-        capacity = min_height_wall * distance
-        max_capacity = max(max_capacity, capacity)
-
-        # Move the pointer with the shorter barrier
-        if heights[l_height] < heights[r_height]:
-            l_height += 1
-        elif heights[r_height] < heights[l_height]:
-            r_height -= 1
-        else:
-            l_height += 1
-
-    return max_capacity
+# Step1: first na approach is nenu first starting value leftheight ki assign chesina heights ane list lo
+# Step2: second vachesi last index right height ki assign chesina
+# Step3: and oka variable create chesina dani peru max_capacity
+# Step4: and loop condition cesina endhi ante left height pointer index is eppudu right pointer kanna thakuva vundali
+# Step5: after that manaki small wall kavali 2 walls lo endhukante 2 walls vunnai okati chinnadi and okati peddadi manamu peddha wall tesukonte water padipothai so anduke okati peddawall and okati chinna wall vunnappudu manam chinna wall tesukovali
+# Step6: and tharuvatha manam a heights okka index calculate cheyali nenu distance ane variable tesukunnanu then indexes calculate chesinanu ela ante eppudu manamu ekkuva vunde index - thakuvva vunte index e calculate cheyali
+# Step7: and capacity ane variable tesukoni nenu height * distance calculate chesthe width vasthundi ade manam capacity antam e program lo
+# Step8: so ikkada nenu max capacity calculate chesthanu e dantlo ekkuva nellu padathayo adhi tesukuntanu.
+# Step9: ippudu pointers i move cheyali ela ante a wall height takkuva vunte a wall move cheyali (meaning enti ante ippudu left variable value low ga vunte right kanna manamu left move chestham ade right thakuva vunte right move chestham and 2ndu wallsu equal ga vunte manam edo okati move chesthamu.)
+# Step10: inka manamu a maximum capacity container ni print chesthamu anthe ingga ipoindhi problem.
 
 
-if __name__ == "__main__":
-    heights = [3, 1, 2, 5, 4, 8, 2]
-    result = max_container_capacity(heights)
-    print(f"Barrier Heights: {heights}")
-    print(f"Maximum Storage Capacity: {result}")
+# Time and Space Complexity:
+# Time Complexity : O(n) -> Linear because we used only single loop
+# Space Complexity: O(1) -> Constant because we use one variable that stores only one value

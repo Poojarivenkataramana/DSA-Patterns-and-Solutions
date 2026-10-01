@@ -1,51 +1,33 @@
-"""
-================================================================================
-Problem: Valid Palindrome (Transaction Code Verification)
-Pattern: Two Pointers (Opposite Direction String Verification)
-LeetCode: LC 125 - Valid Palindrome (Basic Exact Match Variant)
-================================================================================
+# Day 4 — Two Pointers: Palindrome Pattern
+# This is a new pattern from the ones you've solved so far.
+# 🎯 Scenario: Transaction Code Verification
+# A payment system receives a transaction code:
+# code = "ABCDCBA"
+# The system considers the code valid if it reads the same from left to right and right to left.
+# For example:
+# A B C D C B A
+# ↑           ↑
+# L           R
+# We compare the characters at both pointers.
 
-Scenario: Transaction Code Verification
-A payment system receives a transaction code:
-    code = "ABCDCBA"
-The system considers the code valid if it reads the same from left to right 
-and right to left (a palindrome).
+code = "ABCDCBA"
+left = 0
+right = len(code) - 1
+is_palindrome = True
 
-Example:
-    Input: code = "ABCDCBA"
-    Output: True
-
-    Input: code = "ABCDEBA"
-    Output: False
-
-Approach (Opposite Direction Two Pointers):
-1. Place left pointer at index 0 and right pointer at len(code) - 1.
-2. While left <= right:
-   - If code[left] != code[right], return False immediately.
-   - Else, move left += 1 and right -= 1.
-3. If loop finishes without mismatch, return True.
-
-Complexity:
-- Time Complexity: O(n) - Single scan up to the middle of the string.
-- Space Complexity: O(1) - Constant auxiliary space.
-================================================================================
-"""
-
-def is_valid_palindrome_basic(code: str) -> bool:
-    left = 0
-    right = len(code) - 1
-
-    while left <= right:
-        if code[left] != code[right]:
-            return False
+while left <= right:
+    if code[left] != code[right]:
+        is_palindrome = False
+        break
+    elif code[left] == code[right]:
         left += 1
         right -= 1
 
-    return True
+if is_palindrome:
+    print("True")
+else:
+    print("False")
 
-
-if __name__ == "__main__":
-    test_cases = ["ABCDCBA", "RACECAR", "HELLO", "A"]
-    for code in test_cases:
-        result = is_valid_palindrome_basic(code)
-        print(f"Code: '{code}' -> Is Palindrome? {result}")
+# Time and Space Complexity:
+# Time Complexity: O(n) - Scans up to middle of string
+# Space Complexity: O(1) - Constant auxiliary space

@@ -1,60 +1,37 @@
-"""
-================================================================================
-Problem: Move Zeroes to End (Payment Processing Clean-up)
-Pattern: Two Pointers (Fast & Slow Pointers / Partitioning)
-LeetCode: LC 283 - Move Zeroes
-================================================================================
+# 🔥 Problem 3 — Payment Processing System
+# A payment system stores transaction values:
+# transactions = [0, 150, 0, 200, 350, 0, 500]
+# Here:
+# 0 = failed/empty transaction
+# The system wants all valid transactions at the beginning and all 0s at the end.
+# Expected:
+# [150, 200, 350, 500, 0, 0, 0]
+# Rules:
+# Modify the existing array in-place
+# Don't create another array
+# Don't use remove()
+# Don't use sort()
+# Use Two Pointers
 
-Scenario: Payment Processing System
-A payment system stores transaction values:
-    transactions = [0, 150, 0, 200, 350, 0, 500]
-Here:
-- 0 = failed/empty transaction
-- Non-zero = valid transaction
+transactions = [0, 150, 0, 200, 350, 0, 500]
+f = 0
+s = 0
 
-Move all valid transactions to the beginning and all 0s to the end in-place 
-while maintaining the relative order of non-zero elements.
-
-Rules:
-- Modify array in-place.
-- Do not create another array.
-- Do not use remove() or sort().
-- Use Two Pointers.
-
-Example:
-    Input: transactions = [0, 150, 0, 200, 350, 0, 500]
-    Output: [150, 200, 350, 500, 0, 0, 0]
-
-Approach (Fast & Slow Pointer Swap):
-1. Initialize `s` (slow pointer for placing next non-zero) and `f` (fast pointer for scanning) at index 0.
-2. If transactions[f] == 0:
-     Move `f` forward to find a non-zero element.
-3. If transactions[f] != 0:
-     Swap transactions[s] and transactions[f].
-     Increment both `s` and `f`.
-4. Continue until `f` reaches the end.
-
-Complexity:
-- Time Complexity: O(n) - Single pass through the array.
-- Space Complexity: O(1) - In-place modification without extra memory.
-================================================================================
-"""
-
-def move_zeroes_to_end(transactions: list[int]) -> list[int]:
-    s = 0  # slow pointer: marks the position for the next non-zero element
-    f = 0  # fast pointer: scans for non-zero elements
-
-    while f < len(transactions):
-        if transactions[f] != 0:
-            transactions[s], transactions[f] = transactions[f], transactions[s]
-            s += 1
+while f < len(transactions):
+    if transactions[f] == 0:
         f += 1
+    elif transactions[f] != 0:
+        transactions[s], transactions[f] = transactions[f], transactions[s]
+        f += 1
+        s += 1
 
-    return transactions
+print(transactions)
 
+# Approach: First I initialize the fast and slow pointers at the same direction and same index.
+# Why same index: -> because here we didn't compare adjacent elements we are just checking the element is itself is a zero
+# if zero move one stem here the element checking/seeing nonzero elements is fast and slow is just places at the nonzero place
+# so whenever we found nonzero we swap with zero and move both pointers until fast reach transactions length.
 
-if __name__ == "__main__":
-    transactions = [0, 150, 0, 200, 350, 0, 500]
-    print(f"Before: {transactions}")
-    move_zeroes_to_end(transactions)
-    print(f"After : {transactions}")
+# Time and Space Complexity:
+# Time Complexity is: O(n) Linear
+# Space Complexity is: O(1) constant

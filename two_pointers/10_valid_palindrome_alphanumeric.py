@@ -1,64 +1,47 @@
-"""
-================================================================================
-Problem: Clean Transaction Code (Valid Palindrome with Alphanumeric Filtering)
-Pattern: Two Pointers (Skipping Non-Alphanumeric Characters)
-LeetCode: LC 125 - Valid Palindrome
-================================================================================
+# Day 4 — Problem 2: Clean Transaction Code
+# A payment system receives a transaction code that may contain spaces, punctuation, and mixed case:
+# code = "A man, a plan, a canal: Panama"
+# We need to determine whether it is a palindrome after considering only letters/numbers and ignoring case.
+# For example:
+# "A man, a plan, a canal: Panama"
+#         ↓
+# "amanaplanacanalpanama"
+#         ↓
+# palindrome ✅
+# Your Two-Pointers approach
+# Don't create a reversed string.
+# Use:
+# left → beginning
+# right → end
+# If the left character isn't alphanumeric → move left
+# If the right character isn't alphanumeric → move right
+# Otherwise compare them ignoring case
+# If they differ → False
+# If they match → move both
 
-Scenario: Clean Transaction Code
-A payment system receives a transaction code that may contain spaces, 
-punctuation, and mixed casing:
-    code = "A man, a plan, a canal: Panama"
+code = "A man, a plan, a canal: Panam a"
 
-Determine whether it is a palindrome after considering only alphanumeric characters 
-and ignoring case.
+l = 0
+r = len(code) - 1
+is_palindrome = True
 
-Rules:
-- Do NOT create a reversed string.
-- Left pointer starts at beginning (l = 0).
-- Right pointer starts at end (r = len(code) - 1).
-- If code[l] is not alphanumeric, move l += 1.
-- If code[r] is not alphanumeric, move r -= 1.
-- Compare code[l].lower() == code[r].lower().
-  * If different -> return False.
-  * If match -> move l += 1, r -= 1.
+while l <= r:
+    if not code[l].isalnum():
+        l += 1
+    elif not code[r].isalnum():
+        r -= 1
+    elif code[l].lower() == code[r].lower():
+        l += 1
+        r -= 1
+    elif code[l].lower() != code[r].lower():
+        is_palindrome = False
+        break
 
-Example:
-    Input: "A man, a plan, a canal: Panama"
-    Filtered: "amanaplanacanalpanama"
-    Output: True
+if is_palindrome:
+    print('True')
+else:
+    print('False')
 
-Complexity:
-- Time Complexity: O(n) - Two pointers meet in the middle in one pass.
-- Space Complexity: O(1) - Evaluated in-place without generating a clean copy string.
-================================================================================
-"""
-
-def is_palindrome_alphanumeric(code: str) -> bool:
-    l = 0
-    r = len(code) - 1
-
-    while l <= r:
-        if not code[l].isalnum():
-            l += 1
-        elif not code[r].isalnum():
-            r -= 1
-        elif code[l].lower() == code[r].lower():
-            l += 1
-            r -= 1
-        else:
-            return False
-
-    return True
-
-
-if __name__ == "__main__":
-    test_cases = [
-        "A man, a plan, a canal: Panama",
-        "race a car",
-        "Was it a car or a cat I saw?",
-        "No 'x' in Nixon"
-    ]
-    for text in test_cases:
-        ans = is_palindrome_alphanumeric(text)
-        print(f"Input: \"{text}\"\n  -> Is Palindrome: {ans}\n")
+# Time and Space Complexity:
+# Time Complexity: O(n) - Single pass from both ends
+# Space Complexity: O(1) - Evaluated in-place without creating extra strings

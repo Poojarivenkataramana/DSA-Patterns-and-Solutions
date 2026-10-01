@@ -1,50 +1,29 @@
-"""
-================================================================================
-Problem: Delivery Package Pair (Target Weight Pair)
-Pattern: Two Pointers (Opposite Direction)
-================================================================================
+# Day 3 — Problem 2: Delivery Pair
+# Scenario:
+# A delivery company has a sorted list of package weights:
+# weights = [5, 10, 15, 20, 25, 30, 35]
+# target = 45
+# Find two package weights whose sum is exactly 45.
+# Use:
+# Two pointers
+# left at the beginning
+# right at the end
+# No nested loops
 
-Scenario: Delivery Package Pair
-A delivery company has a sorted list of package weights:
-    weights = [5, 10, 15, 20, 25, 30, 35]
-Target weight is 45.
-Find two package weights whose sum is exactly 45.
+weights = [5, 10, 15, 20, 25, 30, 35]
+target = 45
+left = 0
+right = len(weights) - 1
 
-Rules:
-- Use two pointers (left at start, right at end).
-- No nested loops.
+while left < right:
+    if weights[left] + weights[right] == target:
+        print((weights[left], weights[right]))
+        break
+    elif weights[left] + weights[right] > target:
+        right -= 1
+    elif weights[left] + weights[right] < target:
+        left += 1
 
-Example:
-    Input: weights = [5, 10, 15, 20, 25, 30, 35], target = 45
-    Output: (10, 35)
-    Explanation: 10 + 35 = 45.
-
-Complexity:
-- Time Complexity: O(n) - Single pass.
-- Space Complexity: O(1) - In-place comparison with O(1) memory.
-================================================================================
-"""
-
-def find_delivery_pair(weights: list[int], target: int) -> tuple[int, int] | None:
-    left = 0
-    right = len(weights) - 1
-
-    while left < right:
-        current_sum = weights[left] + weights[right]
-        if current_sum == target:
-            return (weights[left], weights[right])
-        elif current_sum > target:
-            right -= 1
-        else:
-            left += 1
-
-    return None
-
-
-if __name__ == "__main__":
-    weights = [5, 10, 15, 20, 25, 30, 35]
-    target = 45
-    pair = find_delivery_pair(weights, target)
-    print(f"Package Weights: {weights}")
-    print(f"Target Weight: {target}")
-    print(f"Found Delivery Pair: {pair}")
+# Time and Space Complexity:
+# Time Complexity: O(n) - Single pass with two pointers
+# Space Complexity: O(1) - Constant auxiliary space

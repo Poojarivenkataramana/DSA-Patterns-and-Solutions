@@ -1,107 +1,75 @@
-"""
-================================================================================
-Problem: 3Sum / Three-Item Budget Match
-Pattern: Fixed Pointer + Two Pointers (Opposite Direction)
-LeetCode: LC 15 - 3Sum
-================================================================================
+# Day 4 — Problem 4: Three-Item Budget Match
+# Scenario:
+# A shopping system has sorted item prices:
+# prices = [-4, -1, 0, 1, 2, 5]
+# The system wants to find three different items whose total price is 0.
+# For example:
+# -1 + 0 + 1 = 0
+# -4 +  -1 + 5 = 0
+# New pattern 🧠
+# This time we'll combine:
+# One fixed pointer + two pointers
+# fixed →   left →       ← right
+# For each fixed element, use two pointers to find the remaining two values.
+# Rules:
+# Array is sorted.
+# Don't use three nested loops.
+# Don't use set() for the main search.
+# Return all valid triplets.
 
-Scenario 1: Three-Item Budget Match
-A shopping system has sorted item prices:
-    prices = [-4, -1, 0, 1, 2, 5]
-Find three items whose total price is 0 (e.g., [-1, 0, 1] and [-4, -1, 5]).
+# --- Part 1: Three-Item Budget Match ---
+values = [-4, -1, 0, 1, 2, 5]
+for f in range(len(values)):
+    left = f + 1
+    right = len(values) - 1
+    while left < right:
+        if values[f] + values[left] + values[right] > 0:
+            right -= 1
+        elif values[f] + values[left] + values[right] < 0:
+            left += 1
+        elif values[f] + values[left] + values[right] == 0:
+            print([values[f], values[left], values[right]])
+            left += 1
+            right -= 1
 
-Scenario 2: Classic Unique 3Sum Problem
-Given an integer array nums, return all the unique triplets [nums[i], nums[j], nums[k]] 
-such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
 
-Approach (Sort + Fixed Pointer + Two Pointers):
-1. Sort the array in non-decreasing order: nums.sort().
-2. Iterate `fixed` index from 0 to len(nums) - 3:
-   - Duplicate Avoidance (Fixed): If fixed > 0 and nums[fixed] == nums[fixed - 1], skip it!
-   - Initialize two pointers: left = fixed + 1, right = len(nums) - 1.
-   - While left < right:
-     * total = nums[fixed] + nums[left] + nums[right]
-     * If total == 0:
-         Append [nums[fixed], nums[left], nums[right]] to results.
-         Skip duplicate left values: while left < right and nums[left] == nums[left + 1]: left += 1
-         Skip duplicate right values: while left < right and nums[right] == nums[right - 1]: right -= 1
-         Move both pointers: left += 1, right -= 1
-     * If total < 0:
-         Sum is too small -> left += 1
-     * If total > 0:
-         Sum is too large -> right -= 1
-3. Return results.
+# --- Part 2: Unique 3Sum (Handling Duplicates) ---
+# three_sum()
+nums = [-1, 0, 1, 2, -1, -4]
+nums.sort()
+result = []
 
-Complexity:
-- Time Complexity: O(n^2) - O(n log n) sorting + O(n^2) two-pointer exploration.
-- Space Complexity: O(1) or O(n) depending on sort implementation (excluding output list).
-================================================================================
-"""
+# now we need to initialize the loop for picking first fixed number
+for fixed in range(len(nums) - 2):
+    # we checking now if fixed number is comes again like duplicate
+    if fixed > 0 and nums[fixed] == nums[fixed - 1]:
+        continue
 
-def three_sum_budget_match(prices: list[int]) -> list[list[int]]:
-    """Finds all zero-sum triplets from an already sorted list of prices."""
-    result = []
-    for f in range(len(prices)):
-        left = f + 1
-        right = len(prices) - 1
+    left = fixed + 1
+    right = len(nums) - 1
 
-        while left < right:
-            total = prices[f] + prices[left] + prices[right]
-            if total > 0:
-                right -= 1
-            elif total < 0:
+    while left < right:
+        total = nums[fixed] + nums[left] + nums[right]
+
+        if total == 0:
+            result.append([nums[fixed], nums[left], nums[right]])
+            # checking left is already used that value or not if used then we skip it
+            while left < right and nums[left] == nums[left + 1]:
                 left += 1
-            else:
-                result.append([prices[f], prices[left], prices[right]])
-                left += 1
+            # checking right is already used that value or not if used then we skip it
+            while left < right and nums[right] == nums[right - 1]:
                 right -= 1
+            # after checking those loop conditions we move both pointers
+            left += 1
+            right -= 1
 
-    return result
+        elif total < 0:
+            left += 1
+        else:
+            right -= 1
 
+print(result)
 
-def three_sum_unique(nums: list[int]) -> list[list[int]]:
-    """Finds all UNIQUE zero-sum triplets with duplicate handling (LeetCode 15)."""
-    nums.sort()
-    result = []
-
-    for fixed in range(len(nums) - 2):
-        # Skip duplicate fixed values
-        if fixed > 0 and nums[fixed] == nums[fixed - 1]:
-            continue
-
-        left = fixed + 1
-        right = len(nums) - 1
-
-        while left < right:
-            total = nums[fixed] + nums[left] + nums[right]
-
-            if total == 0:
-                result.append([nums[fixed], nums[left], nums[right]])
-
-                # Skip duplicate left elements
-                while left < right and nums[left] == nums[left + 1]:
-                    left += 1
-                # Skip duplicate right elements
-                while left < right and nums[right] == nums[right - 1]:
-                    right -= 1
-
-                left += 1
-                right -= 1
-            elif total < 0:
-                left += 1
-            else:
-                right -= 1
-
-    return result
-
-
-if __name__ == "__main__":
-    # Test Budget Match
-    prices = [-4, -1, 0, 1, 2, 5]
-    print(f"Prices: {prices}")
-    print(f"Zero-Sum Triplets: {three_sum_budget_match(prices)}\n")
-
-    # Test Unique 3Sum
-    nums = [-1, 0, 1, 2, -1, -4]
-    print(f"Unsorted Numbers: {nums}")
-    print(f"Unique 3Sum Triplets: {three_sum_unique(nums)}")
+# Time & Space Complexity:
+# Time Complexity: O(n^2) - O(n log n) for sorting + O(n^2) for fixed pointer and two-pointer traversal
+# Space Complexity: O(1) - Constant auxiliary space (excluding the output list)
